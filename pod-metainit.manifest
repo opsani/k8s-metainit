@@ -1,0 +1,28 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  annotations:
+    scheduler.alpha.kubernetes.io/critical-pod: ""
+  creationTimestamp: null
+  labels:
+    tier: node
+  name: opsani-metainit
+  namespace: kube-system
+spec:
+  containers:
+   - name: metainit
+     # EDIT this to change the label used to recognize 'initializer' pods:
+     command: [ "python", "/metainit.py", "k8s.opsani.io/initializer"]
+     # CHANGE this to use a different image:
+     image: opsani/lk-metainit:latest
+     resources:
+       limits: {}
+       requests:
+         cpu: 50m
+#    securityContext:
+#      privileged: true
+  hostNetwork: true
+  tolerations:
+  - key: CriticalAddonsOnly
+    operator: Exists
+status: {}
